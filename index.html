@@ -261,7 +261,7 @@ function calculateLoan() {
     }
 
     document.getElementById('lblLoanAmount').innerText = Math.round(loanAmount / 10000).toLocaleString() + " 萬元";
-    document.getElementById('lblBankFee').innerText = bankFee.toLocaleString() + " 元";
+    document.getElementById('lblBankFee').innerText = bankFee.toLocaleString();
 
     var totalMonths = loanYears * 12;
     var graceMonths = graceYears * 12;
