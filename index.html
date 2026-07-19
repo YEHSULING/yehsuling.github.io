@@ -297,30 +297,74 @@ function calculateLoan() {
 
     } else if (repayType === '1') {
         var remainingPrincipal = loanAmount;
-        var graceInterestTotal = 0;
-        var amortizeInterestTotal = 0;
+        var s1Months = (rateType === '2') ? parseInt(document.getElementById('stage1Months').value) : 0;
+        if (isNaN(s1Months) || s1Months < 0) s1Months = 24;
 
-        for (var i = 0; i < graceMonths; i++) {
-            graceInterestTotal += remainingPrincipal * monthlyRates[i];
+        // 1. 計算第一階段（如果有二階段利率）
+        var stage1MonthlyPay = 0;
+        if (rateType === '2' && s1Months > 0) {
+            var r1 = monthlyRates[0];
+            // 考慮是否有寬限期
+            if (graceMonths > 0) {
+                var graceInterestTotal = 0;
+                for (var i = 0; i < graceMonths; i++) {
+                    graceInterestTotal += remainingPrincipal * monthlyRates[i];
+                }
+                var avgGracePay = Math.round(graceInterestTotal / graceMonths);
+                detailHTML += `<div class="result-item">寬限期內每月應繳 (只繳利息)：<br><span class="highlight">${avgGracePay.toLocaleString()}</span> 元</div>`;
+            }
+
+            // 第一階段本息攤還
+            var actualAmortizeMonths = totalMonths - graceMonths;
+            var temp1 = Math.pow(1 + r1, actualAmortizeMonths);
+            stage1MonthlyPay = Math.round(loanAmount * (r1 * temp1) / (temp1 - 1));
+            
+            // 累加前 s1Months 的利息與扣除本金
+            for (var i = 0; i < s1Months; i++) {
+                var interest = remainingPrincipal * monthlyRates[i];
+                totalInterest += interest;
+                if (i >= graceMonths) {
+                    var principal = stage1MonthlyPay - interest;
+                    remainingPrincipal -= principal;
+                }
+            }
+            
+            if (graceMonths > 0) {
+                detailHTML += `<div class="result-item">第一階段攤還期每月應繳 (第 ${Math.floor(graceMonths/12)+1} 年起)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
+            } else {
+                detailHTML += `<div class="result-item">第一階段每月應繳 (前 ${Math.floor(s1Months/12)} 年)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
+            }
+        } else {
+            // 原本的一段式處理
+            if (graceMonths > 0) {
+                var graceInterestTotal = 0;
+                for (var i = 0; i < graceMonths; i++) {
+                    graceInterestTotal += remainingPrincipal * monthlyRates[i];
+                }
+                var avgGracePay = Math.round(graceInterestTotal / graceMonths);
+                detailHTML += `<div class="result-item">寬限期內每月應繳 (只繳利息)：<br><span class="highlight">${avgGracePay.toLocaleString()}</span> 元</div>`;
+            }
         }
 
-        var tempRate = monthlyRates[graceMonths]; 
-        var temp = Math.pow(1 + tempRate, amortizeMonths);
-        var standardMonthlyPay = Math.round(loanAmount * (tempRate * temp) / (temp - 1));
+        // 2. 計算第二階段（剩餘期數）
+        var r2 = monthlyRates[totalMonths - 1];
+        var remainingMonths = totalMonths - Math.max(s1Months, graceMonths);
+        var temp2 = Math.pow(1 + r2, remainingMonths);
+        var stage2MonthlyPay = Math.round(remainingPrincipal * (r2 * temp2) / (temp2 - 1));
 
-        for (var i = graceMonths; i < totalMonths; i++) {
-            var interestOfCurrentMonth = remainingPrincipal * monthlyRates[i];
-            amortizeInterestTotal += interestOfCurrentMonth;
-            var principalOfCurrentMonth = standardMonthlyPay - interestOfCurrentMonth;
-            remainingPrincipal -= principalOfCurrentMonth;
+        for (var i = Math.max(s1Months, graceMonths); i < totalMonths; i++) {
+            var interest = remainingPrincipal * monthlyRates[i];
+            totalInterest += interest;
+            var principal = stage2MonthlyPay - interest;
+            remainingPrincipal -= principal;
         }
-        totalInterest = Math.round(graceInterestTotal + amortizeInterestTotal);
 
-        if (graceMonths > 0) {
-            var avgGracePay = Math.round(graceInterestTotal / graceMonths);
-            detailHTML += `<div class="result-item">寬限期內每月應繳 (只繳利息)：<br><span class="highlight">${avgGracePay.toLocaleString()}</span> 元</div>`;
+        if (rateType === '2') {
+            detailHTML += `<div class="result-item"><strong>第二階段起每月應繳 (第 ${Math.floor(s1Months/12)+1} 年起)：</strong><br><span class="highlight">${stage2MonthlyPay.toLocaleString()}</span> 元</div>`;
+        } else {
+            detailHTML += `<div class="result-item"><strong>攤還期每月應繳 (本息固定)：</strong><br><span class="highlight">${stage2MonthlyPay.toLocaleString()}</span> 元</div>`;
         }
-        detailHTML += `<div class="result-item"><strong>攤還期每月應繳 (本息固定)：</strong><br><span class="highlight">${standardMonthlyPay.toLocaleString()}</span> 元</div>`;
+        totalInterest = Math.round(totalInterest);
 
     } else if (repayType === '2') {
         var monthlyPrincipal = loanAmount / amortizeMonths;
