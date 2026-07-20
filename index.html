@@ -331,11 +331,11 @@ function calculateLoan() {
                 }
             }
             
-            if (graceMonths > 0) {
-                detailHTML += `<div class="result-item">第一階段攤還期每月應繳 (第 ${Math.floor(graceMonths/12)+1} 年起)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
-            } else {
-                detailHTML += `<div class="result-item">第一階段每月應繳 (前 ${Math.floor(s1Months/12)} 年)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
-            }
+      if (graceMonths > 0) {
+        detailHTML += `<div class="result-item">第一階段攤還期每月應繳 (第 ${graceMonths + 1}～${s1Months} 個月)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
+    } else {
+        detailHTML += `<div class="result-item">第一階段每月應繳 (前 ${s1Months} 個月)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
+    }
         } else {
             // 原本的一段式處理
             if (graceMonths > 0) {
@@ -362,7 +362,7 @@ function calculateLoan() {
         }
 
         if (rateType === '2') {
-            detailHTML += `<div class="result-item"><strong>第二階段起每月應繳 (第 ${Math.floor(s1Months/12)+1} 年起)：</strong><br><span class="highlight">${stage2MonthlyPay.toLocaleString()}</span> 元</div>`;
+    detailHTML += `<div class="result-item"><strong>第二階段起每月應繳 (第 ${s1Months + 1} 個月起至全期結束)：</strong><br><span class="highlight">${stage2MonthlyPay.toLocaleString()}</span> 元</div>`;
         } else {
             detailHTML += `<div class="result-item"><strong>攤還期每月應繳 (本息固定)：</strong><br><span class="highlight">${stage2MonthlyPay.toLocaleString()}</span> 元</div>`;
         }
