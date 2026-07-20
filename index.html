@@ -6,242 +6,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>房貸試算 | 房貸計算機：手機專用首選 - 精準房貸試算器</title>
-    <!-- Dcard & FB 預覽分享設定 -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="精準房貸試算器｜手機免登入快速試算">
     <meta property="og:description" content="專為手機優化、免註冊登入、無負擔的房貸計算機。支持本息/本金平均攤還、寬限期與多段式利率。">
     <meta property="og:image" content="https://yehsuling.github.io/preview.png">  
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 30px auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        h2 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 25px;
-        }
-        .input-group {
-            margin-bottom: 18px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #4a5568;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        button {
-            width: 100%;
-            padding: 14px;
-            background-color: #3182ce;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #2b6cb0;
-        }
-        .result {
-            margin-top: 25px;
-            padding: 20px;
-            background-color: #ebf8ff;
-            border-left: 5px solid #3182ce;
-            border-radius: 4px;
-            display: none;
-        }
-        .result h3 {
-            margin-top: 0;
-            color: #2b6cb0;
-        }
-        .result-item {
-            margin: 12px 0;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-        .highlight {
-            font-size: 20px;
-            font-weight: bold;
-            color: #e53e3e;
-        }
-        .sub-text {
-            font-size: 14px;
-            color: #718096;
-            display: block;
-            margin-top: 4px;
-        }
-        .info-section {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
-            color: #4a5568;
-        }
-        .info-section h3 {
-            color: #2c3e50;
-            font-size: 18px;
-        }
-        .info-section p {
-            font-size: 15px;
-            line-height: 1.6;
-        }
-        .disclaimer {
-            margin-top: 30px;
-            font-size: 12px;
-            color: #a0aec0;
-            line-height: 1.6;
-            border-top: 1px dashed #e2e8f0;
-            padding-top: 15px;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f5f7fa; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 30px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 25px; }
+        .input-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 14px; background-color: #3182ce; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #2b6cb0; }
+        .result { margin-top: 25px; padding: 20px; background-color: #ebf8ff; border-left: 5px solid #3182ce; border-radius: 4px; display: none; }
+        .result-item { margin: 12px 0; font-size: 16px; line-height: 1.5; }
+        .highlight { font-size: 20px; font-weight: bold; color: #e53e3e; }
+        .info-section { margin-top: 40px; padding-top: 20px; border-top: 2px solid #e2e8f0; color: #4a5568; }
+        .disclaimer { margin-top: 30px; font-size: 12px; color: #a0aec0; line-height: 1.6; border-top: 1px dashed #e2e8f0; padding-top: 15px; }
     </style>
 </head>
 <body>
-
-<!-- 新增的 SEO 大標題 (H1) -->
-<h1 style="text-align: center; color: #0056b3; margin: 20px 15px 10px 15px; font-size: 20px; line-height: 1.5; word-break: keep-all;">房貸試算 | 精準房貸計算機<br>(2026最新版)</h1>
-
+<h1 style="text-align: center; color: #0056b3; margin: 20px 15px 10px 15px; font-size: 20px; line-height: 1.5;">房貸試算 | 精準房貸計算機<br>(2026最新版)</h1>
 <div class="container">
-    <h2 style="text-align: center; color: #0056b3; margin-bottom: 25px; font-size: 20px; word-break: keep-all;">🏠 精準房貸試算器</h2>
-    
-    <div class="input-group">
-        <label for="loanAmountInput">貸款總額 (萬元)</label>
-        <input type="number" id="loanAmountInput" value="1000">
-    </div>
-
-    <div class="input-group">
-        <label for="rateType">利率類型</label>
-        <select id="rateType" onchange="toggleRateFields()">
-            <option value="1" selected>一段式 (固定利率)</option>
-            <option value="2">二階段式 (適用新青安/優惠房貸)</option>
-        </select>
-    </div>
-    
-    <div class="input-group" id="singleRateGroup">
-        <label for="interestRate">年利率 (%)</label>
-        <input type="number" id="interestRate" step="0.01" value="2.18">
-    </div>
-
-    <div id="stageRateGroup" style="display: none;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 18px;">
-            <div>
-                <label for="stage1Months">第一階段月數</label>
-                <input type="number" id="stage1Months" value="24">
-            </div>
-            <div>
-                <label for="stage1Rate">第一階段利率 (%)</label>
-                <input type="number" id="stage1Rate" step="0.01" value="1.775">
-            </div>
+    <h2>🏠 精準房貸試算器</h2>
+    <div class="input-group"><label>貸款總額 (萬元)</label><input type="number" id="loanAmountInput" value="1000"></div>
+    <div class="input-group"><label>利率類型</label><select id="rateType" onchange="toggleRateFields()"><option value="1">一段式</option><option value="2" selected>二階段式</option></select></div>
+    <div class="input-group" id="singleRateGroup" style="display:none;"><label>年利率 (%)</label><input type="number" id="interestRate" step="0.01" value="2.18"></div>
+    <div id="stageRateGroup">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+            <div><label>第一階段月數</label><input type="number" id="stage1Months" value="24"></div>
+            <div><label>第一階段利率 (%)</label><input type="number" id="stage1Rate" step="0.01" value="1.775"></div>
         </div>
-        <div class="input-group">
-            <label for="stage2Rate">第二階段起利率 (%)</label>
-            <input type="number" id="stage2Rate" step="0.01" value="2.15">
-        </div>
+        <div class="input-group"><label>第二階段起利率 (%)</label><input type="number" id="stage2Rate" step="0.01" value="2.25"></div>
     </div>
-    
-    <div class="input-group">
-        <label for="loanTerm">貸款年限 (年)</label>
-        <input type="number" id="loanTerm" value="30" min="1">
-    </div>
-    
-    <div class="input-group" id="gracePeriodGroup">
-        <label for="gracePeriod">寬限期 (年)</label>
-        <input type="number" id="gracePeriod" value="0" min="0">
-    </div>
-
-    <div class="input-group">
-        <label for="bankFee">銀行開辦費 / 手續費 (元)</label>
-        <input type="number" id="bankFee" value="5000" min="0">
-    </div>
-
-    <div class="input-group">
-        <label for="repayType">還款方式</label>
-        <select id="repayType" onchange="toggleGraceField()">
-            <option value="1" selected>本息平均攤還 (每月繳款固定，最常見)</option>
-            <option value="2">本金平均攤還 (首月繳最多，之後逐月遞減)</option>
-            <option value="3">到期還本 (期間內每月只繳利息，期末才一次還本金)</option>
-        </select>
-    </div>
-    
+    <div class="input-group"><label>貸款年限 (年)</label><input type="number" id="loanTerm" value="30"></div>
+    <div class="input-group" id="gracePeriodGroup"><label>寬限期 (年)</label><input type="number" id="gracePeriod" value="3" min="0"></div>
+    <div class="input-group"><label>銀行手續費 (元)</label><input type="number" id="bankFee" value="5000"></div>
+    <div class="input-group"><label>還款方式</label><select id="repayType" onchange="toggleGraceField()"><option value="1">本息平均攤還</option><option value="2">本金平均攤還</option><option value="3">到期還本</option></select></div>
     <button onclick="calculateLoan()">開始精準試算</button>
-    
     <div class="result" id="resultBox">
         <h3>📊 試算結果</h3>
-        <div class="result-item">
-            貸款總還款本金：<span style="font-weight:bold; color:#2c3e50;" id="lblLoanAmount">0 萬元</span>
-        </div>
-        
         <div id="paymentDetailBlock"></div>
-
-        <div class="result-item" id="rowFinalPrincipal" style="display:none;">
-            <span style="color:#e53e3e; font-weight:bold;">⚠️ 到期當月需一次償還本金：</span><span class="highlight" id="lblFinalPrincipal">0</span> 元
-        </div>
-        <div class="result-item">
-            銀行開辦手續費：<span id="lblBankFee" style="font-weight:bold;">0</span> 元
-        </div>
-        <div class="result-item">
-            總共支付利息：<span id="totalInterest" style="font-weight:bold;">0</span> 元
-        </div>
-        <div class="result-item">
-            總還款支出 (本金+利息+手續費)：<span id="totalPayable" style="font-weight:bold; color:#2b6cb0;">0</span> 元
-        </div>
-    </div>
-
-    <!-- 新增房貸知識補充，協助通過 Google 審核 -->
-    <div class="info-section">
-        <h3>💡 2026 購屋族必看：如何選擇適合自己的還款方式？</h3>
-        <p><strong>1. 本息平均攤還：</strong>適合每個月有固定薪水收入的上班族。由於每個月還款的總金額固定，最方便進行每月的家庭財務預算規劃。</p>
-        <p><strong>2. 本金平均攤還：</strong>適合目前手頭資金較充裕，且想省下更多利息的購屋族。雖然前期的還款壓力比較大，但隨著本金快速減少，每月的負擔會越來越輕鬆。</p>
-        <p><strong>3. 到期還本（理財型房貸）：</strong>適合有頻繁資金周轉需求的投資族群或中小企業主。平時只繳利息可以保持極高的現金流彈性，等合約到期時再一筆將本金歸還。</p>
-    </div>
-    
-    <div class="disclaimer">
-        ⚠️ 免責聲明：本站所有計算結果及數據僅供參考與個人財務規劃使用，不構成任何實際貸款之要約、建議與合約承諾。實際貸款條件、利率、手續費及各期實際還款金額，請以各金融機構最終核貸之實際合約為準。<br><br>
-        📌 聲明：本站為個人興趣開發之純分享工具，恕不接受任何客製化修改、功能調整或技術支援。最新優化與版本公告請見：<a href="https://www.facebook.com/precise.mortgage.calculator" target="_blank" style="color: #0056b3; text-decoration: underline;">精準房貸試算器 官方粉專</a>。
+        <div class="result-item" id="rowFinalPrincipal" style="display:none;">⚠️ 到期需償還本金：<span class="highlight" id="lblFinalPrincipal">0</span> 元</div>
+        <div class="result-item">總支付利息：<span id="totalInterest" style="font-weight:bold;">0</span> 元</div>
+        <div class="result-item">總還款支出：<span id="totalPayable" style="font-weight:bold; color:#2b6cb0;">0</span> 元</div>
     </div>
 </div>
-
 <script>
 function toggleRateFields() {
-    var rateType = document.getElementById('rateType').value;
-    if (rateType === '1') {
-        document.getElementById('singleRateGroup').style.display = 'block';
-        document.getElementById('stageRateGroup').style.display = 'none';
-    } else {
-        document.getElementById('singleRateGroup').style.display = 'none';
-        document.getElementById('stageRateGroup').style.display = 'block';
-    }
+    var isStage = document.getElementById('rateType').value === '2';
+    document.getElementById('singleRateGroup').style.display = isStage ? 'none' : 'block';
+    document.getElementById('stageRateGroup').style.display = isStage ? 'block' : 'none';
 }
-
 function toggleGraceField() {
-    var repayType = document.getElementById('repayType').value;
-    if (repayType === '3') {
-        document.getElementById('gracePeriodGroup').style.display = 'none';
-    } else {
-        document.getElementById('gracePeriodGroup').style.display = 'block';
-    }
+    document.getElementById('gracePeriodGroup').style.display = document.getElementById('repayType').value === '3' ? 'none' : 'block';
 }
-
 function calculateLoan() {
     var loanAmount = parseFloat(document.getElementById('loanAmountInput').value) * 10000;
     var rateType = document.getElementById('rateType').value;
@@ -249,203 +69,42 @@ function calculateLoan() {
     var graceYears = parseInt(document.getElementById('gracePeriod').value);
     var bankFee = parseFloat(document.getElementById('bankFee').value);
     var repayType = document.getElementById('repayType').value;
-
-    if (isNaN(loanAmount) || loanAmount <= 0 || isNaN(loanYears) || loanYears <= 0) {
-        alert('請填寫正確的貸款總額與年限！');
-        return;
-    }
-    if (isNaN(bankFee) || bankFee < 0) bankFee = 0;
-    if (isNaN(graceYears) || graceYears < 0 || repayType === '3') graceYears = 0;
-    
-    if (repayType !== '3' && graceYears >= loanYears) {
-        alert('寬限期年限不可以大於或等於貸款總年限');
-        return;
-    }
-
-    document.getElementById('lblLoanAmount').innerText = Math.round(loanAmount / 10000).toLocaleString() + " 萬元";
-    document.getElementById('lblBankFee').innerText = bankFee.toLocaleString();
-
     var totalMonths = loanYears * 12;
     var graceMonths = graceYears * 12;
-    var amortizeMonths = totalMonths - graceMonths;
-
     var monthlyRates = [];
-    if (rateType === '1') {
-        var r = (parseFloat(document.getElementById('interestRate').value) / 100) / 12;
-        for (var i = 0; i < totalMonths; i++) monthlyRates.push(r);
-    } else {
-        var r1 = (parseFloat(document.getElementById('stage1Rate').value) / 100) / 12;
-        var r2 = (parseFloat(document.getElementById('stage2Rate').value) / 100) / 12;
-        var s1Months = parseInt(document.getElementById('stage1Months').value);
-        if (isNaN(s1Months) || s1Months <= 0) s1Months = 24;
-        for (var i = 0; i < totalMonths; i++) {
-            monthlyRates.push(i < s1Months ? r1 : r2);
-        }
-    }
+    var s1Months = (rateType === '2') ? parseInt(document.getElementById('stage1Months').value) : 0;
+    var r1 = (rateType === '2') ? (parseFloat(document.getElementById('stage1Rate').value)/100)/12 : (parseFloat(document.getElementById('interestRate').value)/100)/12;
+    var r2 = (rateType === '2') ? (parseFloat(document.getElementById('stage2Rate').value)/100)/12 : r1;
+    for(var i=0; i<totalMonths; i++) monthlyRates.push(i < s1Months ? r1 : r2);
 
-    var totalInterest = 0;
     var detailHTML = "";
+    var totalInterest = 0;
+    var remainingPrincipal = loanAmount;
     document.getElementById('rowFinalPrincipal').style.display = 'none';
 
-    if (repayType === '3') {
-        for (var i = 0; i < totalMonths; i++) {
-            totalInterest += loanAmount * monthlyRates[i];
-        }
-        var avgInterest = Math.round(totalInterest / totalMonths);
-        
-        detailHTML = `<div class="result-item"><strong>貸款期間每月應繳 (純利息)：</strong><br><span class="highlight">${avgInterest.toLocaleString()}</span> 元 <span class="sub-text">(採全期利息平均計算)</span></div>`;
-        
-        // 修正隱藏的「元元」疊字 Bug，此處直接輸出純數字，與 HTML 的「元」完美結合
-        document.getElementById('lblFinalPrincipal').innerText = Math.round(loanAmount).toLocaleString();
-        document.getElementById('rowFinalPrincipal').style.display = 'block';
-
-    } else if (repayType === '1') {
-        var remainingPrincipal = loanAmount;
-        var s1Months = (rateType === '2') ? parseInt(document.getElementById('stage1Months').value) : 0;
-        if (isNaN(s1Months) || s1Months < 0) s1Months = 24;
-
-        // 1. 計算第一階段
-        var stage1MonthlyPay = 0;
-        if (rateType === '2' && s1Months > 0) {
-            var r1 = monthlyRates[0];
-            
-            // 處理寬限期利息
-            if (graceMonths > 0) {
-                var graceInterestTotal = 0;
-                for (var i = 0; i < graceMonths; i++) {
-                    graceInterestTotal += remainingPrincipal * monthlyRates[i];
-                }
-                var avgGracePay = Math.round(graceInterestTotal / graceMonths);
-                detailHTML += `<div class="result-item">寬限期內每月應繳 (只繳利息)：<br><span class="highlight">${avgGracePay.toLocaleString()}</span> 元</div>`;
-            }
-
-            // 計算第一階段應有之本息攤還金額
-            var actualAmortizeMonths = totalMonths - graceMonths;
-            var temp1 = Math.pow(1 + r1, actualAmortizeMonths);
-            stage1MonthlyPay = Math.round(loanAmount * (r1 * temp1) / (temp1 - 1));
-            
-            // 扣除本金與累加利息 (只執行到 s1Months)
-            for (var i = 0; i < s1Months; i++) {
-                var interest = remainingPrincipal * monthlyRates[i];
-                totalInterest += interest;
-                if (i >= graceMonths) {
-                    var principal = stage1MonthlyPay - interest;
-                    remainingPrincipal -= principal;
-                }
-            }
-
-            // 隱形防呆補丁：若寬限期 > 第一階段，補齊利息黑洞
-            if (graceMonths > s1Months) {
-                for (var i = s1Months; i < graceMonths; i++) {
-                    totalInterest += remainingPrincipal * monthlyRates[i];
-                }
-            }
-            
-            // 智能防呆顯示邏輯
-            if (graceMonths > 0) {
-                if (graceMonths < s1Months) {
-                    detailHTML += `<div class="result-item">第一階段攤還期每月應繳 (第 ${graceMonths + 1}～${s1Months} 個月)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
-                }
-                // 若 graceMonths >= s1Months，代表第一階段完全沒有還到本金，自動隱藏此段文字防呆
-            } else {
-                detailHTML += `<div class="result-item">第一階段每月應繳 (前 ${s1Months} 個月)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
-            }
-        } else {
-            // 原本的一段式處理
-            if (graceMonths > 0) {
-                var graceInterestTotal = 0;
-                for (var i = 0; i < graceMonths; i++) {
-                    graceInterestTotal += remainingPrincipal * monthlyRates[i];
-                }
-                var avgGracePay = Math.round(graceInterestTotal / graceMonths);
-                detailHTML += `<div class="result-item">寬限期內每月應繳 (只繳利息)：<br><span class="highlight">${avgGracePay.toLocaleString()}</span> 元</div>`;
-            }
-        }
-
-        // 2. 計算第二階段
-        var r2 = monthlyRates[totalMonths - 1];
-        var remainingMonths = totalMonths - Math.max(s1Months, graceMonths);
-        var temp2 = Math.pow(1 + r2, remainingMonths);
-        var stage2MonthlyPay = Math.round(remainingPrincipal * (r2 * temp2) / (temp2 - 1));
-
-        for (var i = Math.max(s1Months, graceMonths); i < totalMonths; i++) {
-            var interest = remainingPrincipal * monthlyRates[i];
-            totalInterest += interest;
-            var principal = stage2MonthlyPay - interest;
-            remainingPrincipal -= principal;
-        }
-
-        // 第二階段智能顯示
-        if (rateType === '2') {
-            var stage2Start = Math.max(s1Months, graceMonths) + 1;
-            detailHTML += `<div class="result-item"><strong>第二階段起每月應繳 (第 ${stage2Start} 個月起至全期結束)：</strong><br><span class="highlight">${stage2MonthlyPay.toLocaleString()}</span> 元</div>`;
-        } else {
-            detailHTML += `<div class="result-item"><strong>攤還期每月應繳 (本息固定)：</strong><br><span class="highlight">${stage2MonthlyPay.toLocaleString()}</span> 元</div>`;
-        }
-        totalInterest = Math.round(totalInterest);
-
-    } else if (repayType === '2') {
-        var monthlyPrincipal = loanAmount / amortizeMonths;
-        var remainingPrincipal = loanAmount;
-        var graceInterestTotal = 0;
-        var firstMonthPay = 0;
-        var lastMonthPay = 0;
-
-        for (var i = 0; i < graceMonths; i++) {
-            graceInterestTotal += remainingPrincipal * monthlyRates[i];
-        }
-
-        for (var i = graceMonths; i < totalMonths; i++) {
-            var interestOfCurrentMonth = remainingPrincipal * monthlyRates[i];
-            totalInterest += interestOfCurrentMonth;
-            var currentPay = monthlyPrincipal + interestOfCurrentMonth;
-            
-            if (i === graceMonths) firstMonthPay = Math.round(currentPay);
-            if (i === totalMonths - 1) lastMonthPay = Math.round(currentPay);
-            
-            remainingPrincipal -= monthlyPrincipal;
-        }
-        totalInterest = Math.round(totalInterest + graceInterestTotal);
-
+    if (repayType === '1') {
+        // 寬限期
         if (graceMonths > 0) {
-            var avgGracePay = Math.round(graceInterestTotal / graceMonths);
-            detailHTML += `<div class="result-item">寬限期內每月應繳 (只繳利息)：<br><span class="highlight">${avgGracePay.toLocaleString()}</span> 元</div>`;
+            var g1 = 0, g2 = 0;
+            for(var i=0; i<graceMonths; i++) {
+                var int = remainingPrincipal * monthlyRates[i];
+                totalInterest += int;
+                if(i < s1Months) g1 += int; else g2 += int;
+            }
+            if(g1 > 0) detailHTML += `<div>第 1～${Math.min(graceMonths, s1Months)} 個月 (利息)：<span class="highlight">${Math.round(g1/Math.min(graceMonths, s1Months)).toLocaleString()}</span> 元/月</div>`;
+            if(g2 > 0) detailHTML += `<div>第 ${s1Months+1}～${graceMonths} 個月 (利息)：<span class="highlight">${Math.round(g2/(graceMonths-s1Months)).toLocaleString()}</span> 元/月</div>`;
         }
-        detailHTML += `<div class="result-item"><strong>攤還期應繳金額 (逐月遞減)：</strong><br>首月金額：<span class="highlight">${firstMonthPay.toLocaleString()}</span> 元<br>尾月金額：<span style="font-weight:bold;">${lastMonthPay.toLocaleString()}</span> 元</div>`;
+        // 攤還期
+        var rFinal = monthlyRates[totalMonths-1];
+        var n = totalMonths - graceMonths;
+        var monthlyPay = Math.round(remainingPrincipal * (rFinal * Math.pow(1+rFinal, n)) / (Math.pow(1+rFinal, n) - 1));
+        detailHTML += `<div style="margin-top:10px;"><strong>第 ${graceMonths+1} 個月起 (全期攤還)：<br><span class="highlight">${monthlyPay.toLocaleString()}</span> 元/月</strong></div>`;
     }
-
     document.getElementById('paymentDetailBlock').innerHTML = detailHTML;
     document.getElementById('totalInterest').innerText = Math.round(totalInterest).toLocaleString();
     document.getElementById('totalPayable').innerText = Math.round(loanAmount + totalInterest + bankFee).toLocaleString();
     document.getElementById('resultBox').style.display = 'block';
 }
 </script>
-
-<!-- 新增的 SEO 與 AdSense 乾淨內容區塊 - 手機全相容版 -->
-<div style="max-width: 800px; margin: 50px auto 100px; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #333; line-height: 1.8; border-top: 2px solid #eee;">
-    
-    <h2 style="color: #0056b3; font-size: 24px; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-bottom: 25px;">📊 2026 精準房貸試算器：新手買房理財全攻略</h2>
-    
-    <p>歡迎使用本站提供的免費<strong>精準房貸試算器</strong>。本工具專為首購族、有轉貸需求或提前還款規劃的房貸戶設計，提供<strong>簡潔流暢</strong>、介面直覺且手機友好的操作體驗。在您規劃人生重大的購屋決策時，精確掌握每月本息攤還金額，能幫助您更穩健地調配個人與家庭的現金流，確保財務健康。</p>
-    
-    <h3 style="color: #333; font-size: 18px; margin-top: 30px; margin-bottom: 15px;">一、什麼是本息平均攤還？與本金平均攤還有何不同？</h3>
-    <p>在申請房屋貸款時，銀行最常見的兩種還款方式為「本息平均攤還」與「本金平均攤還」：</p>
-    <ul>
-        <li><strong>本息平均攤還（本息攤還）：</strong> 將貸款期間內應繳納的「本金」加上「利息」平均分配在每一個月。其優點在於每個月支付的房貸金額完全相同，非常便於上班族規劃每月的收支預算。</li>
-        <li><strong>本金平均攤還（本金攤還）：</strong> 將總本金平均分配到每個月，利息則依據剩餘本金逐月遞減計算。其特點是前期還款壓力非常大，但隨著時間推移，每月的還款金額會越來越少，總利息支出也會比本息攤還來得低。</li>
-    </ul>
-    
-    <h3 style="color: #333; font-size: 18px; margin-top: 30px; margin-bottom: 15px;">二、如何使用本房貸計算機規劃您的購屋預算？</h3>
-    <p>要評估自己能買多少錢的房子，建議遵循<strong>「房貸三分之一原則」</strong>：每月的房貸還款金額，最好不要超過家庭總收入的三分之一。例如，若家庭月收入為 10 萬元台幣，每月的房貸支出應控制在 3 萬至 3.5 萬元台幣以內，以確保生活品質與緊急預備金的充裕。</p>
-    <p>您只需在本工具中輸入「貸款總額」、「貸款年限（如 20年、30年、40年）」、「寬限期（若無則填0）」以及「預估年利率」，即可一鍵精確計算出每月的還款細節。本工具計算公式完全符合各大銀行標準，讓您在與銀行對保談判時，手裡握有最精準的數據籌碼。</p>
-    
-    <h3 style="color: #333; font-size: 18px; margin-top: 30px; margin-bottom: 15px;">三、2026 最新政策：新青安 3.0 的房貸規劃策略</h3>
-    <p>隨著 2026 年<strong>「新青安 3.0」</strong>政策微調與審查趨嚴，首購族在申貸時更需要精準掌握自身的財務防線。新青安雖提供極具優勢的低利率與高達 40 年的貸款期限，但購屋族仍須留意補貼期滿後的利率跳升，以及自身「無薪資證明」或熟齡申貸時可能面臨的成數限制。</p>
-    <p>本工具特別針對<strong>新青安 3.0 混搭一般商業房貸</strong>的族群，設計了「二階段式利率」試算功能。您可以將第一階段設定為新青安的補貼期（如 36 個月），並輸入補貼優惠利率；第二階段則輸入補貼結束後或混搭商業貸款的預估利率。透過精準的雙階段本息攤還計算，讓您提早看清 3 年或 5 年後補貼結束時的真實月供變化，確保長達 40 年的現金流絕對安全。</p>
-    
-    <h3 style="color: #333; font-size: 18px; margin-top: 30px; margin-bottom: 15px;">四、本站隱私權與免責聲明 (Privacy Policy)</h3>
-    <p>本站為純個人開發之免費開源工具。我們極度重視您的個人隱私：本網頁所有試算程序皆於您的瀏覽器本地端（Client-side）執行，<strong>本站絕不會、也無技術能力收集、儲存或傳送您所輸入的任何財務數據或個人隱私資料</strong>。所有數據於網頁關閉後即自動清除，請安心使用。本站試算結果僅供理財規劃參考，實際貸款條件與撥款金額仍須以各承貸金融機構之最終審核結果為準。</p>
-
-</div>
 </body>
 </html>
