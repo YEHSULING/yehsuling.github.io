@@ -302,69 +302,71 @@ function calculateLoan() {
         var s1Months = (rateType === '2') ? parseInt(document.getElementById('stage1Months').value) : 0;
         if (isNaN(s1Months) || s1Months < 0) s1Months = 24;
 
-        // 1. 計算第一階段（如果有二階段利率）
-        var stage1MonthlyPay = 0;
-        if (rateType === '2' && s1Months > 0) {
-            var r1 = monthlyRates[0];
-            // 考慮是否有寬限期
-            if (graceMonths > 0) {
-                var graceInterestTotal = 0;
-                for (var i = 0; i < graceMonths; i++) {
-                    graceInterestTotal += remainingPrincipal * monthlyRates[i];
-                }
-                var avgGracePay = Math.round(graceInterestTotal / graceMonths);
-                detailHTML += `<div class="result-item">寬限期內每月應繳 (只繳利息)：<br><span class="highlight">${avgGracePay.toLocaleString()}</span> 元</div>`;
-            }
-
-            // 第一階段本息攤還
-            var actualAmortizeMonths = totalMonths - graceMonths;
-            var temp1 = Math.pow(1 + r1, actualAmortizeMonths);
-            stage1MonthlyPay = Math.round(loanAmount * (r1 * temp1) / (temp1 - 1));
-            
-            // 累加前 s1Months 的利息與扣除本金
-            for (var i = 0; i < s1Months; i++) {
-                var interest = remainingPrincipal * monthlyRates[i];
-                totalInterest += interest;
-                if (i >= graceMonths) {
-                    var principal = stage1MonthlyPay - interest;
-                    remainingPrincipal -= principal;
-                }
-            }
-            
-      if (graceMonths > 0) {
-        detailHTML += `<div class="result-item">第一階段攤還期每月應繳 (第 ${graceMonths + 1}～${s1Months} 個月)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
-    } else {
-        detailHTML += `<div class="result-item">第一階段每月應繳 (前 ${s1Months} 個月)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
-    }
-        } else {
-            // 原本的一段式處理
-            if (graceMonths > 0) {
-                var graceInterestTotal = 0;
-                for (var i = 0; i < graceMonths; i++) {
-                    graceInterestTotal += remainingPrincipal * monthlyRates[i];
-                }
-                var avgGracePay = Math.round(graceInterestTotal / graceMonths);
-                detailHTML += `<div class="result-item">寬限期內每月應繳 (只繳利息)：<br><span class="highlight">${avgGracePay.toLocaleString()}</span> 元</div>`;
-            }
-        }
-
-        // 2. 計算第二階段（剩餘期數）
-        var r2 = monthlyRates[totalMonths - 1];
-        var remainingMonths = totalMonths - Math.max(s1Months, graceMonths);
-        var temp2 = Math.pow(1 + r2, remainingMonths);
-        var stage2MonthlyPay = Math.round(remainingPrincipal * (r2 * temp2) / (temp2 - 1));
-
-        for (var i = Math.max(s1Months, graceMonths); i < totalMonths; i++) {
-            var interest = remainingPrincipal * monthlyRates[i];
-            totalInterest += interest;
-            var principal = stage2MonthlyPay - interest;
-            remainingPrincipal -= principal;
-        }
-
         if (rateType === '2') {
-    detailHTML += `<div class="result-item"><strong>第二階段起每月應繳 (第 ${s1Months + 1} 個月起至全期結束)：</strong><br><span class="highlight">${stage2MonthlyPay.toLocaleString()}</span> 元</div>`;
+            // 【核心重構：二階段本息平均攤還的精準分段拆解】
+            if (graceMonths > 0) {
+                var g1Months = Math.min(graceMonths, s1Months);
+                var g2Months = Math.max(0, graceMonths - s1Months);
+
+                if (g1Months > 0) {
+                    var r1 = monthlyRates[0];
+                    var payG1 = Math.round(loanAmount * r1);
+                    detailHTML += `<div class="result-item">第 1～${g1Months} 個月 (寬限期/優惠利息)：<br><span class="highlight">${payG1.toLocaleString()}</span> 元/月</div>`;
+                    totalInterest += payG1 * g1Months;
+                }
+                if (g2Months > 0) {
+                    var r2 = monthlyRates[s1Months];
+                    var payG2 = Math.round(loanAmount * r2);
+                    detailHTML += `<div class="result-item">第 ${s1Months + 1}～${graceMonths} 個月 (寬限期/一般利息)：<br><span class="highlight">${payG2.toLocaleString()}</span> 元/月</div>`;
+                    totalInterest += payG2 * g2Months;
+                }
+            }
+
+            var currentMonth = graceMonths;
+            if (s1Months > graceMonths) {
+                var r1 = monthlyRates[graceMonths];
+                var n1 = totalMonths - graceMonths; 
+                var temp1 = Math.pow(1 + r1, n1);
+                var payAmort1 = Math.round(loanAmount * (r1 * temp1) / (temp1 - 1));
+                
+                detailHTML += `<div class="result-item">第 ${graceMonths + 1}～${s1Months} 個月 (優惠本息攤還)：<br><span class="highlight">${payAmort1.toLocaleString()}</span> 元/月</div>`;
+                
+                for (var i = graceMonths; i < s1Months; i++) {
+                    var intOfM = remainingPrincipal * monthlyRates[i];
+                    totalInterest += intOfM;
+                    remainingPrincipal -= (payAmort1 - intOfM);
+                }
+                currentMonth = s1Months;
+            }
+
+            if (currentMonth < totalMonths) {
+                var r2 = monthlyRates[totalMonths - 1];
+                var n2 = totalMonths - currentMonth;
+                var temp2 = Math.pow(1 + r2, n2);
+                var payAmort2 = Math.round(remainingPrincipal * (r2 * temp2) / (temp2 - 1));
+                
+                detailHTML += `<div class="result-item"><strong>第 ${currentMonth + 1} 個月起至全期結束 (本息攤還)：</strong><br><span class="highlight">${payAmort2.toLocaleString()}</span> 元/月</div>`;
+                
+                for (var i = currentMonth; i < totalMonths; i++) {
+                    var intOfM = remainingPrincipal * monthlyRates[i];
+                    totalInterest += intOfM;
+                    remainingPrincipal -= (payAmort2 - intOfM);
+                }
+            }
+
         } else {
-            detailHTML += `<div class="result-item"><strong>攤還期每月應繳 (本息固定)：</strong><br><span class="highlight">${stage2MonthlyPay.toLocaleString()}</span> 元</div>`;
+            // 一段式本息平均攤還
+            if (graceMonths > 0) {
+                var r = monthlyRates[0];
+                var payG = Math.round(loanAmount * r);
+                detailHTML += `<div class="result-item">寬限期內每月應繳 (只繳利息)：<br><span class="highlight">${payG.toLocaleString()}</span> 元</div>`;
+                totalInterest += payG * graceMonths;
+            }
+            var r = monthlyRates[totalMonths - 1];
+            var temp = Math.pow(1 + r, amortizeMonths);
+            var payAmort = Math.round(loanAmount * (r * temp) / (temp - 1));
+            detailHTML += `<div class="result-item"><strong>攤還期每月應繳 (本息固定)：</strong><br><span class="highlight">${payAmort.toLocaleString()}</span> 元</div>`;
+            totalInterest += (payAmort * amortizeMonths) - loanAmount;
         }
         totalInterest = Math.round(totalInterest);
 
