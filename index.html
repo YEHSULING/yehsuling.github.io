@@ -47,13 +47,14 @@
     </div>
     <div class="info-section">
         <h3>💡 2026 購屋族必看：如何選擇適合自己的還款方式？</h3>
-        <p><strong>1. 本息平均攤還：</strong>每個月還款金額固定，方便預算規劃。</p>
-        <p><strong>2. 本金平均攤還：</strong>前期壓力大，但總利息支出較低。</p>
-        <p><strong>3. 到期還本：</strong>適合有頻繁資金周轉需求的族群，平時只繳利息。</p>
-        <p><strong>政策提醒：</strong>新青安 3.0 混搭商業房貸時，務必精算補貼結束後的利率變化。</p>
+        <p><strong>1. 本息平均攤還：</strong>適合每個月有固定薪水收入的上班族，方便預算規劃。</p>
+        <p><strong>2. 本金平均攤還：</strong>適合資金較充裕的購屋族，隨本金減少每月負擔遞減。</p>
+        <p><strong>3. 到期還本：</strong>適合投資族群，期間只繳利息，期末一次還本。</p>
+        <h3>三、2026 最新政策：新青安 3.0 的房貸規劃策略</h3>
+        <p>本工具特別針對新青安 3.0 混搭商業房貸族群，提供精準二階段試算，協助您掌握補貼期後的月供變化。</p>
     </div>
     <div class="disclaimer">
-        ⚠️ 免責聲明：本站數據僅供參考。📌 最新公告：<a href="https://www.facebook.com/precise.mortgage.calculator" target="_blank">官方粉專</a>。
+        ⚠️ 免責聲明：本站數據僅供參考。📌 最新公告：<a href="https://www.facebook.com/precise.mortgage.calculator" target="_blank">精準房貸試算器 官方粉專</a>。
     </div>
 </div>
 <script>
@@ -93,6 +94,8 @@ function calculateLoan() {
         detailHTML = `<div>每月應繳 (純利息)：<span class="highlight">${Math.round(totalInterest/totalMonths).toLocaleString()}</span> 元/月</div>`;
         document.getElementById('lblFinalPrincipal').innerText = (loanAmount/10000).toLocaleString();
         document.getElementById('rowFinalPrincipal').style.display = 'block';
+    } else {
+        detailHTML = `<div>本計算機目前已優化「本息平均攤還」精準分段顯示。</div>`;
     }
     document.getElementById('paymentDetailBlock').innerHTML = detailHTML;
     document.getElementById('totalInterest').innerText = Math.round(totalInterest).toLocaleString();
