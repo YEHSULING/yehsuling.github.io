@@ -294,7 +294,9 @@ function calculateLoan() {
         var avgInterest = Math.round(totalInterest / totalMonths);
         
         detailHTML = `<div class="result-item"><strong>貸款期間每月應繳 (純利息)：</strong><br><span class="highlight">${avgInterest.toLocaleString()}</span> 元 <span class="sub-text">(採全期利息平均計算)</span></div>`;
-        document.getElementById('lblFinalPrincipal').innerText = (loanAmount / 10000).toLocaleString() + " 萬元";
+        
+        // 修正隱藏的「元元」疊字 Bug，此處直接輸出純數字，與 HTML 的「元」完美結合
+        document.getElementById('lblFinalPrincipal').innerText = Math.round(loanAmount).toLocaleString();
         document.getElementById('rowFinalPrincipal').style.display = 'block';
 
     } else if (repayType === '1') {
@@ -302,11 +304,12 @@ function calculateLoan() {
         var s1Months = (rateType === '2') ? parseInt(document.getElementById('stage1Months').value) : 0;
         if (isNaN(s1Months) || s1Months < 0) s1Months = 24;
 
-        // 1. 計算第一階段（如果有二階段利率）
+        // 1. 計算第一階段
         var stage1MonthlyPay = 0;
         if (rateType === '2' && s1Months > 0) {
             var r1 = monthlyRates[0];
-            // 考慮是否有寬限期
+            
+            // 處理寬限期利息
             if (graceMonths > 0) {
                 var graceInterestTotal = 0;
                 for (var i = 0; i < graceMonths; i++) {
@@ -316,12 +319,12 @@ function calculateLoan() {
                 detailHTML += `<div class="result-item">寬限期內每月應繳 (只繳利息)：<br><span class="highlight">${avgGracePay.toLocaleString()}</span> 元</div>`;
             }
 
-            // 第一階段本息攤還
+            // 計算第一階段應有之本息攤還金額
             var actualAmortizeMonths = totalMonths - graceMonths;
             var temp1 = Math.pow(1 + r1, actualAmortizeMonths);
             stage1MonthlyPay = Math.round(loanAmount * (r1 * temp1) / (temp1 - 1));
             
-            // 累加前 s1Months 的利息與扣除本金
+            // 扣除本金與累加利息 (只執行到 s1Months)
             for (var i = 0; i < s1Months; i++) {
                 var interest = remainingPrincipal * monthlyRates[i];
                 totalInterest += interest;
@@ -330,12 +333,23 @@ function calculateLoan() {
                     remainingPrincipal -= principal;
                 }
             }
+
+            // 隱形防呆補丁：若寬限期 > 第一階段，補齊利息黑洞
+            if (graceMonths > s1Months) {
+                for (var i = s1Months; i < graceMonths; i++) {
+                    totalInterest += remainingPrincipal * monthlyRates[i];
+                }
+            }
             
-      if (graceMonths > 0) {
-        detailHTML += `<div class="result-item">第一階段攤還期每月應繳 (第 ${graceMonths + 1}～${s1Months} 個月)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
-    } else {
-        detailHTML += `<div class="result-item">第一階段每月應繳 (前 ${s1Months} 個月)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
-    }
+            // 智能防呆顯示邏輯
+            if (graceMonths > 0) {
+                if (graceMonths < s1Months) {
+                    detailHTML += `<div class="result-item">第一階段攤還期每月應繳 (第 ${graceMonths + 1}～${s1Months} 個月)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
+                }
+                // 若 graceMonths >= s1Months，代表第一階段完全沒有還到本金，自動隱藏此段文字防呆
+            } else {
+                detailHTML += `<div class="result-item">第一階段每月應繳 (前 ${s1Months} 個月)：<br><span class="highlight">${stage1MonthlyPay.toLocaleString()}</span> 元</div>`;
+            }
         } else {
             // 原本的一段式處理
             if (graceMonths > 0) {
@@ -348,7 +362,7 @@ function calculateLoan() {
             }
         }
 
-        // 2. 計算第二階段（剩餘期數）
+        // 2. 計算第二階段
         var r2 = monthlyRates[totalMonths - 1];
         var remainingMonths = totalMonths - Math.max(s1Months, graceMonths);
         var temp2 = Math.pow(1 + r2, remainingMonths);
@@ -361,8 +375,10 @@ function calculateLoan() {
             remainingPrincipal -= principal;
         }
 
+        // 第二階段智能顯示
         if (rateType === '2') {
-    detailHTML += `<div class="result-item"><strong>第二階段起每月應繳 (第 ${s1Months + 1} 個月起至全期結束)：</strong><br><span class="highlight">${stage2MonthlyPay.toLocaleString()}</span> 元</div>`;
+            var stage2Start = Math.max(s1Months, graceMonths) + 1;
+            detailHTML += `<div class="result-item"><strong>第二階段起每月應繳 (第 ${stage2Start} 個月起至全期結束)：</strong><br><span class="highlight">${stage2MonthlyPay.toLocaleString()}</span> 元</div>`;
         } else {
             detailHTML += `<div class="result-item"><strong>攤還期每月應繳 (本息固定)：</strong><br><span class="highlight">${stage2MonthlyPay.toLocaleString()}</span> 元</div>`;
         }
